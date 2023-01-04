@@ -1,0 +1,13 @@
+<div class="centeredMessage">
+<!--  <div class="image" *ngIf="image && image.length>0">-->
+     <img class="image" *ngIf="image && image.length>0" [src]="'assets/' + image" />
+<!--  </div>-->
+  <div class="title" *ngIf="title && title.length>0">
+    {{title}}
+  </div>
+  <div class="message" *ngIf="message && message.length>0">
+    {{message}}
+  </div>
+</div>
+
+<!--<img src="../../../assets" />-->

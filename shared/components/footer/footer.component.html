@@ -1,0 +1,71 @@
+
+<div class="main-footer"
+     [ngStyle]="{'background-color':
+    mainStore.selectedBusiness?.parameter?.can_update_settings ?
+    mainStore.selectedBusiness?.parameter?.primary_color: null,
+     'color':  mainStore.selectedBusiness?.parameter?.can_update_settings ?
+     mainStore.getFontColor(mainStore.selectedBusiness?.parameter?.primary_color): null
+    }"
+>
+    <!-- <div class="text-left item"> -->
+        <!-- <div>{{'ADD_DECO_ZIN_TO_YOUR_ECOM' | translate}}</div> -->
+        <!-- <div> -->
+            <!-- <span class="icon-gmail"><span class="path1"></span><span class="path2"></span><span class="path3"></span></span>  &nbsp; -->
+            <!-- <span>{{$env?.supportContact?.email || 'support@decotok.com'}}</span> -->
+        <!-- </div> -->
+        <!-- <div> -->
+            <!-- <span class="icon-whatsapp"><span class="path1"></span><span class="path2"></span><span class="path3"></span></span> &nbsp; -->
+            <!-- <span>{{$env?.supportContact?.whatsapp || '(+212)6 30 93 19 97'}}</span> -->
+        <!-- </div> -->
+    <!-- </div> -->
+    <div class="rating-container item">
+		 <span>Εάν αντιμετωπίζετε προβλήματα με την εφαρμογή επικοινωνήστε μαζί μας.</span>
+    </div>
+    <p class="text-right item">
+        {{'COPYRIGHT' | translate}}
+        {{'VERSION' | translate}}: 0.0.1 | BETA
+    </p>
+
+</div>
+
+
+
+<!-- <ng-template #contentRating let-modal> -->
+    <!-- <div class="myModal" *ngIf="ratingForm"> -->
+        <!-- <div class="modal-header"> -->
+            <!-- <div class="title"><i class="fa fa-envelope" aria-hidden="true"></i> &nbsp; -->
+                <!-- {{'WHAT DO YOU THINK ABOUT DECOTOK?' | translate}}</div> -->
+            <!-- <i class="icon-close" (click)="modal.close()"></i> -->
+        <!-- </div> -->
+        <!-- <form class="modal-body" [formGroup]="ratingForm"> -->
+
+            <!-- <div class="rating-container"> -->
+                <!-- <ngx-stars [readonly]="false" -->
+                           <!-- [size]="baseStars" -->
+                           <!-- [color]="'#ffdc18'" -->
+                           <!-- (ratingOutput)="chooseRating($event)" -->
+                           <!-- [initialStars]="ratingStars" -->
+                <!-- > -->
+                <!-- </ngx-stars> -->
+            <!-- </div> -->
+            <!-- <div class="email-item"> -->
+                <!-- <textarea -->
+                    <!-- type="text" -->
+                    <!-- [formControl]="ratingForm.controls['customer_message']" -->
+                    <!-- class="form-control input-text" -->
+                    <!-- placeholder="Message"></textarea> -->
+            <!-- </div> -->
+        <!-- </form> -->
+        <!-- <div class="modal-footer"> -->
+            <!-- <button class="myButton btn" -->
+                    <!-- [disabled]="submittingRatinngForm || !ratingForm.valid" -->
+                    <!-- type="submit" -->
+                    <!-- (click)="sendEmail(); modal.close()" -->
+                    <!-- mat-button -->
+            <!-- > -->
+                <!-- <i class="fa fa-paper-plane" aria-hidden="true"></i> &nbsp; -->
+                <!-- {{'SEND' | translate}} -->
+            <!-- </button> -->
+        <!-- </div> -->
+    <!-- </div> -->
+<!-- </ng-template> -->

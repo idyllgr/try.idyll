@@ -1,0 +1,391 @@
+<app-header></app-header>
+
+<ng-container *ngIf="!errorLoadBusiness; else errorLoadingTempl">
+    <ng-container *ngIf="!loadingBusiness">
+        <ng-container *ngIf="business; else emptyStateTempl">
+            <div class="content" #contentElement (window:resize)="onResize($event)">
+                <!--        <ng-container></ng-container>-->
+                <ng-container *ngIf="showCamera; else noCameraTools">
+                    <div class="tools" *ngIf="showTools()" [ngClass]="{'full-height-tools': orientation !== 'bottom'}">
+                        <i class="icon-no-camera-1" (click)="showCameraScreen()"></i>
+                        <i class="icon-shutter" (click)="triggerSnapshot();"></i>
+                        <i class="icon-switch-camera" (click)="showNextWebcam(true);"></i>
+                    </div>
+                </ng-container>
+                <ng-template #noCameraTools>
+                    <div class="tools" *ngIf="showTools()" [ngClass]="{'full-height-tools': orientation !== 'bottom'}">
+                        <!--                <i class="icon-zoom-in tool-item" (click)="zoom(1)"></i>-->
+                        <!--                <i class="icon-zoom-out tool-item" (click)="zoom(2)"></i>-->
+                        <input type="file" style="display: none"
+                               id="uploadFiles"
+                               accept="image/*"
+                               multiple="false" #inputFile
+                               (change)="uploadFile($event)"/>
+<!--                        <input type="file" style="display: none"-->
+<!--                               id="uploadFilesForObjects"-->
+<!--                               accept="image/*"-->
+<!--                               multiple="false" #inputFileForObjects-->
+<!--                               (change)="uploadFileForObjects($event)"/>-->
+                        <ng-container *ngIf="mainStore.step === 1">
+                            <i class="icon-camera" *ngIf="allowCamera" (click)="showCameraScreen()"></i>
+                            <label class="pointer upload-area" [for]="'uploadFiles'" [title]="'UPLOAD_PHOTO' | translate">
+                                <i class="icon-upload-photo-2" tabindex="1"></i>
+                            </label>
+                        </ng-container>
+                    </div>
+                </ng-template>
+                <div class="dimensions" [@widthGrow]="showDimensionsPanel" *ngIf="showTools() && !showCamera" >
+                    <div class="dimension-item">
+                        <label class="">
+                            {{'BACKGROUND_HEIGHT' | translate}} ({{ mainStore.selectedBusiness?.parameter?.unit || ' m(SI) '}})
+                        </label>
+                        <div class="input-group">
+                            <i class="icon-measure-height"></i> &nbsp;<input type="number" class="form-control" [(ngModel)]="bgheight"/>
+                        </div>
+                        <div class="stand-alone"  (click)="changeDimensionsState()" *ngIf="showDimensionsPanel === 'closed'; else toggle">
+                            <!--                                    <span>323m x 2m</span>&nbsp;-->
+                            <i class="icon-pencil-and-ruler"></i>
+                        </div>
+                        <ng-template #toggle>
+                            <i (click)="changeDimensionsState()"
+                               class="toggle"
+                               [ngClass]="{
+                                                 'icon-previous': showDimensionsPanel === 'open'
+                                               }">
+                                <!--                                     <i class="toggle"></i>-->
+                            </i>
+                        </ng-template>
+                    </div>
+                    <div class="dimension-item">
+                        <label class="">
+                            <!--                                    <i class="icon-measure-width"></i> &nbsp;-->
+                            {{'BACKGROUND_WIDTH' | translate}} ({{ mainStore.selectedBusiness?.parameter?.unit || ' m(SI) '}})
+                        </label>
+                        <!--                                <input type="number" class="form-control" />-->
+                        <div class="input-group">
+                            <i class="icon-measure-width"></i> &nbsp;<input type="number" class="form-control"  [(ngModel)]="bgWidth"/>
+                        </div>
+                    </div>
+                </div>
+                <!--        <ng-container *ngIf="!showCamera">-->
+                <!--            <i class="icon-full-screen-2" (click)="objectFit='cover'" *ngIf="objectFit=='contain'"></i>-->
+                <!--            <i class="icon-small-screen" (click)="objectFit='contain'" *ngIf="objectFit=='cover'"></i>-->
+                <!--        </ng-container>-->
+                <!--        <mat-horizontal-stepper linear #stepper-->
+
+                <!--                                (selectionChange)="stepperSelectionChanged($event)"-->
+                <!--                                >-->
+                <!--&lt;!&ndash;            [selectedIndex]="mainStore.step - 1"&ndash;&gt;-->
+                <!--&lt;!&ndash;            stepper?.steps?.length>0 ? (mainStore.step - 1): 0&ndash;&gt;-->
+                <!--            <ng-container *ngIf="mainStore.screenSize >= $screenSize.LAPTOP; else oneStep">-->
+                <!--                <mat-step optional="true"-->
+                <!--                    [editable]="false">-->
+                <!--                    <ng-template matStepLabel>{{'ADD_BACKGROUND' | translate}}</ng-template>-->
+                <!--                    <p>{{mainStore.step}}</p>-->
+                <!--                </mat-step>-->
+                <!--                <mat-step optional="true"  [editable]="false">-->
+                <!--                    <ng-template matStepLabel>{{'ADD_OBJECTS' | translate}}</ng-template>-->
+                <!--                    <p>{{mainStore.step}}</p>-->
+                <!--                </mat-step>-->
+                <!--                <mat-step optional="true"  [editable]="false">-->
+                <!--                    <ng-template matStepLabel>{{'DOWNLOAD_DECO_AS_IMAGE' | translate}}</ng-template>-->
+                <!--                    <p>{{mainStore.step}}</p>-->
+                <!--                </mat-step>-->
+                <!--            </ng-container>-->
+                <!--            <ng-template #oneStep>-->
+                <!--&lt;!&ndash;                <mat-step&ndash;&gt;-->
+                <!--&lt;!&ndash;                    [editable]="false">&ndash;&gt;-->
+                <!--&lt;!&ndash;                    <ng-template matStepLabel>{{'ADD_BACKGROUND' | translate}}</ng-template>&ndash;&gt;-->
+                <!--&lt;!&ndash;                    <p>{{mainStore.step}}</p>&ndash;&gt;-->
+                <!--&lt;!&ndash;                </mat-step>&ndash;&gt;-->
+                <!--&lt;!&ndash;                <mat-step&ndash;&gt;-->
+                <!--&lt;!&ndash;                    *ngIf="mainStore.step >= 2"&ndash;&gt;-->
+                <!--&lt;!&ndash;                    >&ndash;&gt;-->
+                <!--&lt;!&ndash;                    <ng-template matStepLabel>{{'ADD_OBJECTS' | translate}}</ng-template>&ndash;&gt;-->
+                <!--&lt;!&ndash;                    <p>{{mainStore.step}}</p>&ndash;&gt;-->
+                <!--&lt;!&ndash;                </mat-step>&ndash;&gt;-->
+                <!--&lt;!&ndash;                <mat-step class="hide-step"&ndash;&gt;-->
+                <!--&lt;!&ndash;                          *ngIf="mainStore.step >= 3"&ndash;&gt;-->
+                <!--&lt;!&ndash;                    >&ndash;&gt;-->
+                <!--&lt;!&ndash;                    <ng-template matStepLabel>{{'DOWNLOAD_DECO_AS_IMAGE' | translate}}</ng-template>&ndash;&gt;-->
+                <!--&lt;!&ndash;                    <p>{{mainStore.step}}</p>&ndash;&gt;-->
+                <!--&lt;!&ndash;                </mat-step>&ndash;&gt;-->
+                <!--            </ng-template>-->
+                <!--        </mat-horizontal-stepper>-->
+
+
+
+                <p-steps [model]="stepperItems"
+                         [(activeIndex)]="selectedStepperIndex"
+                         [readonly]="true"
+                         [ngClass]="{'full-height-width-gallery': mainStore.step === 3 || orientation === 'bottom'}"
+                >
+                </p-steps>
+
+                <ng-container *ngIf="mainStore.step === 1">
+                    <webcam *ngIf="showCamera; else nocamera"
+                            [width]="width"
+                            [height]="height"
+                            [trigger]="triggerObservable"
+                            (imageCapture)="handleImage($event)"
+                            [allowCameraSwitch]="allowCameraSwitch"
+                            [switchCamera]="nextWebcamObservable"
+                            (cameraSwitched)="cameraWasSwitched($event)"
+                            (initError)="handleInitError($event)"
+                    ></webcam>
+                    <ng-template #nocamera>
+                        <doe-gallery [items]="images"
+                                     [thumbsOrientation]="orientation"
+                                     [objectFit]="objectFit"
+                                     [selectedIndex]="selectedBackgroundIndex"
+                                     [itemWidth]="'100%'"
+                                     (selection)="selection($event)"
+                                     [arrows]="false"
+                                     [counter]="false"
+                                     [loading]="'lazy'"
+                                     class="no-doe-viewer"
+                                     #doeGalleryGb
+                        ></doe-gallery>
+                        <div
+                            class="under-gallery middle-gallery"
+                            [ngClass]="{'left-100': orientation === 'left'}"
+                        >
+                            <!--                    <button  mat-icon-button class="navig-button" (click)="navigate(mainStore.step-1)">-->
+                            <!--                        <span class="icon-previous-2"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span></span>-->
+                            <!--                    </button>-->
+                            <div class="under-gallery-body">
+                                &nbsp;
+                                <!--                    <i class="icon-camera" tabindex="1" (click)="showCamera = !showCamera"></i>-->
+                                <!--                    <i class="icon-upload-photo-2" tabindex="1"></i>-->
+                            </div>
+                            <button  mat-icon-button class="navig-button"
+                                     *ngIf="showNext()"
+                                     (click)="navigate(mainStore.step+1)">
+                                <span class="icon-right-arrow"></span>
+                            </button>
+                        </div>
+                    </ng-template>
+                </ng-container>
+                <!--                *ngIf="mainStore.step === 2 || mainStore.step === 3"-->
+                <!--                *ngIf="mainStore.step === 2 || mainStore.step === 3"-->
+                <ng-container >
+                    <doe-gallery *ngIf="mainStore.step === 2"
+                                 [items]="imagesObjects"
+                                 [thumbsOrientation]="orientation"
+                                 [objectFit]="objectFit"
+                                 [loading]="'lazy'"
+                                 [itemWidth]="'100%'"
+                                 [counter]="false"
+                                 [arrows]="false"
+                                 [mouseGestures]="false"
+                                 (selection)="selectObject($event)"
+                                 (thumbClick)="thumbClick($event)"
+                                 #doeGalleryObjects
+                                 class="no-doe-viewer"
+                    ></doe-gallery>
+                    <div class="dropp-area"
+                         #dropArea
+                         [ngClass]="{'full-height-bg': orientation !== 'bottom',
+                         'shimmer': mainStore.step===1 && loadingStateBG !== 'finally',
+                         'full-height-width': mainStore.step===3}"
+                    >
+                        <div class="dimensions-label" *ngIf="bgheight && bgWidth && mainStore.step === 3">
+                            {{bgheight}} x {{bgWidth}} ({{ mainStore.selectedBusiness?.parameter?.unit || ' m(SI) '}})
+                        </div>
+                        <!--                mainStore.step === 3-->
+                        <ng-container *ngIf="isMobileDevice(); else webDevice">
+                            <pinch-zoom
+                                [backgroundColor]="'transparent'"
+                                [auto-zoom-out]="true"
+                                [disableZoomControl]="true"
+                                [overflow]="'visible'"
+                                [autoHeight]="true"
+                                [ngClass]="{'full-height-tools': orientation !== 'bottom', 'full-height-width': mainStore.step===3}"
+                                [draggableImage]="false"
+                            >
+                                <div #workSpaceElement style="height: 100%; width: 100%; text-align: center; position: relative;" #dragBounds id="workSpaceElement"  >
+                                    <img [lazyLoad]="workspaceImage" #imgBg (onStateChange)="loadingBGImage($event)"/>
+                                </div>
+<!--                                [defaultImage]="imageloadingPlaceholder"-->
+                            </pinch-zoom>
+                        </ng-container>
+                        <ng-template #webDevice>
+                            <div #workSpaceElement style="height: 100%; position: relative;" #dragBounds id="workSpaceElement"  >
+                                <img [lazyLoad]="workspaceImage " #imgBg (onStateChange)="loadingBGImage($event)"/>
+                            </div>
+                        </ng-template>
+                    </div>
+<!--                    (mouseup)="isTrashing = false; deleteObject()"-->
+<!--                    (mouseenter)="isTrashing = true"-->
+<!--                    <div class="delete-object-trash"-->
+<!--                         (mouseup)=" deleteObject()"-->
+
+<!--                         #objectTrash-->
+<!--                         id="objectTrash"-->
+<!--                         [ngClass]="{'showTrash' : mainStore.step === 2  }"-->
+<!--                    >-->
+<!--&lt;!&ndash;                        && (isDraggingAnObject || isTrashing)&ndash;&gt;-->
+<!--                        <i class="icon-trash"></i>-->
+<!--                    </div>-->
+
+                    <ng-container *ngIf="mainStore.step === 2">
+<!--                        <ng-container *ngIf="!isDraggingAnObject">-->
+                            <div class="under-gallery middle-gallery"
+                                 [ngClass]="{'left-100': orientation === 'left'}">
+                                <button mat-icon-button class="navig-button"
+                                        *ngIf="showPreview()"
+                                        (click)="navigate(mainStore.step-1)">
+                                    <span class="icon-left-arrow"></span>
+                                </button>
+                                <div class="under-gallery-body">
+                                    &nbsp;
+                                </div>
+                                <button  mat-icon-button class="navig-button"
+                                         *ngIf="showNext()"
+                                         [disabled]="mainStore.step === 2 && (!businessParams?.selected_products?.length) "
+                                         (click)="navigate(mainStore.step+1)">
+                                    <span class="icon-right-arrow"></span>
+                                </button>
+                            </div>
+<!--                        </ng-container>-->
+                    </ng-container>
+                    <ng-container *ngIf="mainStore.step === 3">
+                        <div class="under-gallery full-height-width-gallery middle-gallery">
+                            <button mat-icon-button  class="navig-button"
+                                    *ngIf="showPreview()"
+                                    (click)="navigate(mainStore.step-1)">
+                                <span class="icon-left-arrow"></span>
+                            </button>
+                            <div class="under-gallery-body">
+                                &nbsp;
+                            </div>
+                            <div>&nbsp;</div>
+                        </div>
+                        <div *ngIf="mainStore.step === 3" class="under-gallery full-height-width-gallery" style="width: 100%;">
+                            <div></div>
+                            <div class="under-gallery-body">
+                                <div class="btn-block">
+                                    <button mat-icon-button class="info-button social-button"
+                                            *ngIf="mainStore.selectedBusiness?.parameter?.can_update_settings &&
+                                            mainStore.selectedBusiness?.parameter?.show_ask_phone"
+                                            [disabled]="!businessParams.selected_products || businessParams.selected_products?.length===0"
+                                            (click)="showInformation()">
+                                        <img [lazyLoad]="'assets/images/contact.png'" />
+                                    </button>
+                                    <button mat-button
+                                            (click)="downloadImage()"
+                                            class="download-button social-button ">
+                                        <span class="icon-download"></span> &nbsp;
+                                        {{'DOWNLOAD' | translate}}
+                                    </button>
+<!--                                    <button  mat-icon-button-->
+<!--                                             *ngIf="mainStore.selectedBusiness?.parameter?.can_update_settings &&-->
+<!--                                            mainStore.selectedBusiness?.parameter?.show_gmail"-->
+<!--                                             (click)="openModalGmail(content)"-->
+<!--                                             [disabled]="loadingGmail || !businessParams.selected_products || businessParams.selected_products?.length===0 "-->
+<!--                                             class="gmail-button social-button">-->
+<!--                                        <img [lazyLoad]="'assets/images/gmail.png'" />-->
+<!--                                    </button>-->
+                                </div>
+                            </div>
+                            <div></div>
+                        </div>
+                    </ng-container>
+                </ng-container>
+            </div>
+        </ng-container>
+    </ng-container>
+</ng-container>
+
+<!--</div>-->
+
+<app-footer></app-footer>
+
+<!--<ng-template #content let-modal>-->
+<!--    <div class="myModal" *ngIf="emailForm">-->
+<!--        <div class="modal-header">-->
+<!--            <div class="title"><i class="fa fa-envelope" aria-hidden="true"></i> &nbsp; {{'SEND EMAIL' | translate}}</div>-->
+<!--            <i class="icon-close" (click)="modal.close()"></i>-->
+<!--        </div>-->
+<!--        <form class="modal-body" [formGroup]="emailForm">-->
+<!--            <div class="email-item">-->
+<!--                <input type="text" class="form-control input-text"-->
+<!--                       placeholder="{{'To'| translate}}"-->
+<!--                       disabled-->
+<!--                       [value]="'To: '+ business?.email"-->
+<!--                      />-->
+<!--            </div>-->
+<!--            <div class="email-item">-->
+<!--                <label >{{'MY EMAIL ADDRESS' | translate}}: </label>-->
+<!--                <input type="text"-->
+<!--                       class="form-control input-text"-->
+<!--                       [formControlName]="'customer_email'"-->
+<!--                       placeholder="{{'MY EMAIL ADDRESS' | translate}}"  />-->
+<!--            </div>-->
+<!--            <div *ngIf="(emailForm.get('customer_email').invalid &&-->
+<!--                                         (emailForm.get('customer_email').touched) ||-->
+<!--                                         emailForm.get('customer_email').dirty)">-->
+<!--                <small class="text-danger"-->
+<!--                       *ngIf="emailForm.get('customer_email').hasError('required')">-->
+<!--                    {{'EMAIL IS REQUIRED' | translate}}-->
+<!--                </small>-->
+<!--                <small class="text-danger"-->
+<!--                       *ngIf="emailForm.get('customer_email').hasError('customer_email')">-->
+<!--                    {{'EMAIL INVALID' | translate}}-->
+<!--                </small>-->
+<!--            </div>-->
+<!--            <div class="email-item">-->
+<!--                <div class="img-container">-->
+<!--                    <img [attr.src]="blobresult" />-->
+<!--                </div>-->
+<!--                <textarea-->
+<!--                    type="text"-->
+<!--                    [formControl]="emailForm.controls['customer_message']"-->
+<!--                    class="form-control input-text"-->
+<!--                    placeholder="{{'TYPE YOUR MESSAGE HERE' | translate}}"></textarea>-->
+<!--            </div>-->
+<!--        </form>-->
+<!--        <div class="modal-footer">-->
+<!--            <button class="myButton btn"-->
+<!--                    [disabled]="submittingEmailForm || !emailForm.valid"-->
+<!--                    type="submit"-->
+<!--                    (click)="sendEmail()"-->
+<!--                    mat-button-->
+<!--            >-->
+<!--                <i class="icon-direct" aria-hidden="true"></i> &nbsp;-->
+<!--                {{'SEND' | translate}}-->
+<!--            </button>-->
+<!--        </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</ng-template>-->
+
+
+<ng-template #emptyStateTempl>
+    <app-centred-message [message]="( 'DATA NOT FOUND FOR THE MOMENT' | translate )"
+                         [image]="'images/emptystate.png'"
+    ></app-centred-message>
+</ng-template>
+
+<ng-template #errorLoadingTempl>
+    <app-centred-message [message]="'DATA LOADING ERROR' | translate"
+                         [image]="'images/error404.png'">
+    </app-centred-message>
+</ng-template>
+
+<!--<ng-template #loading>-->
+<!--    <div class="loading">-->
+<!--        <img src="assets/images/loader.gif" />-->
+<!--    </div>-->
+<!--</ng-template>-->
+
+<ngx-ui-loader
+    [text]="'Η εφαρμογή φορτώνει...'"
+    [bgsColor]="'rgba(0, 0, 0)'"
+    [textColor]="'white'"
+    [fgsColor]="'white'"
+    [bgsOpacity]=".8"
+    [bgsType]="'square-jelly-box'"
+    [fgsType]="'square-jelly-box'"
+><p style="color: white" > {{'LOADING' | translate}} </p>
+</ngx-ui-loader>

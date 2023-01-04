@@ -1,0 +1,75 @@
+$footer-height:  min(70px, 10vh);//70px;
+$header-height: min(70px, 10vh);//70px;
+
+$main-color: #000000;
+$mainColor: #000000;
+$secondary-color: #000000;
+$tertiary-color: #f0f1e5;
+$font-color: #636363;
+$SMALL_SCREEN: 320px;
+$MEDIUM_SCREEN: 375px;
+$LARGE_SCREEN: 425px;
+$TABLET_SCREEN: 768px;
+$LAPTOP_SCREEN: 1024px;
+$hoverTransition: all 0.4s ease 0s;
+$sidbarBGAdmin: $secondary-color;
+$mainContainerAdmin: #f9f9f9;
+
+$success : #28a745;
+$info : #17a2b8;
+$warning : #ffc107;
+$danger : #dc3545;
+
+$quaternaryColor: #f9f9f9;
+$quinaryColor: #faa142;
+$senaryColor: #7be495;
+$septenaryColor: #5ccec9;
+$octonaryColor: #adbac3;
+$nonaryColor: #547ce2;
+$denaryColor: #f3533b;
+
+$mainshadow: 0 0 4px 0 rgba(0,0,0,.1);
+
+/******   Sidebar *******/
+
+
+//item
+$sidebar-menuItem-text-1: #fff;
+$sidebar-menuItem-background-1: $sidbarBGAdmin;
+
+$sidebar-menuItem-text-2: #fff;
+$sidebar-menuItem-background-2: $main-color;
+
+$sidebar-menuItem-text-3: #fff;
+$sidebar-menuItem-background-3: $main-color;
+
+// hovered item
+$sidebar-menuItem-background-hover-1: $mainContainerAdmin;
+$sidebar-menuItem-background-hover-2: #000000;
+$sidebar-menuItem-background-hover-3: $secondary-color;
+
+$sidebar-menuItem-text-hover-1: $nonaryColor;
+$sidebar-menuItem-text-hover-2: #fff;
+$sidebar-menuItem-text-hover-3: #fff;
+
+// Active item
+$sidebar-menuItem-text-active-1: $secondary-color;
+$sidebar-menuItem-background-active-1: $mainContainerAdmin;
+
+$sidebar-menuItem-text-active-2: $senaryColor;//#000000;
+$sidebar-menuItem-background-active-2: #fff;//#000000;
+
+$sidebar-menuItem-text-active-3: $mainColor;//#fff;
+$sidebar-menuItem-background-active-3: #fff;//#000000;
+
+
+$sidebar-width: 300px;
+$sidebar-small-width: 220px;
+$sidebar-background: $main-color;
+$header-background: white;
+$sidebar-activeTabBackground: #fff;// #E5F5E3;
+$sidebar-activeTabBorder: 0;//5px solid;
+$sidebar-activeTabColor: $secondary-color;
+$sidebarTextColor: #FFFFFF;
+$sidebarTextColorHover: #fff;
+$sidebarItemHeight: 69px;

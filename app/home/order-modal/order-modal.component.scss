@@ -1,0 +1,406 @@
+@import "../../../styles";
+
+
+::ng-deep .myModal .modal-dialog {
+    width: 90%;
+    margin: 0 auto;
+    .modal-content{
+        padding: 13px min(10px, 3vw);
+        overflow: scroll;
+        .submit-block{
+            padding-bottom: 0 !important;
+        }
+    }
+    .top-container{
+        box-shadow: none;
+        .modal-header{
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0;
+            margin-bottom: 10px;
+            margin-top: 10px;
+            border: 0;
+            .edit-header{
+                font-size: 12px;
+                opacity: .7;
+                cursor: pointer;
+                color: $secondary-color;
+                i:before{
+                    color: $secondary-color;
+                }
+                &:hover{
+                    opacity: 1;
+                }
+            }
+            a{
+                text-decoration: none;
+            }
+            .small-title{
+                font-size: 15px;
+            }
+        }
+        .modal-body{
+            padding: 1.5rem 0 5rem 0;
+        }
+    }
+    .details {
+        display: flex;
+        align-items: unset !important;
+        flex-direction: column;
+        .pre-select{
+            height: 17px;
+        }
+        img{
+            max-height: 200px;
+            box-shadow: 0 0 3px 2px #636060
+        }
+        .photo-details {
+            position: relative;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            //height: 100%;
+            margin-bottom: 15px;
+            .overlay {
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                font-size: 15px;
+                color: white;
+                background-color: rgba(0, 0, 0, .5);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                flex-direction: column;
+                cursor: pointer;
+                margin: 0;
+                padding: 10px 0;
+                //opacity: 0;
+                span{
+                    font-size: 13px;
+                }
+                i:before{
+                    font-size: 40px;
+                }
+            }
+            .hidden-by-opacity{
+                opacity: 0;
+                visibility: hidden;
+            }
+            .small-size{
+                width: 50%;
+            }
+        }
+        .item-input{
+            display: flex;
+            align-items: baseline;
+            margin-bottom: 15px;
+            .icon{
+                width: 40px !important;
+                height: 40px !important;
+            }
+            .tag{
+                display: inline-flex;
+                border-radius: 5px;
+                margin-right: 5px;
+                margin-bottom: 3px;
+                color: white;
+                padding: 4px 5px 1px 5px;
+                box-shadow: 1px 0 0 0 #00000063;
+                cursor: pointer;
+                background-color: $secondary-color;
+            }
+            label{
+                margin-right: 20px;
+                font-weight: 600;
+                min-width: 90px;
+            }
+            input, textarea{
+                font-size: 12px;
+                min-height: 45px;
+            }
+            .select{
+                border: 0;
+                padding-left: 0;
+                font-size: 12px;
+                min-width: unset;
+                padding-right: 0;
+                ::ng-deep .ng-select-container {
+                    border: 1px solid lightgray;
+                    border-radius: 7px;
+                    min-height: 40px;
+                }
+                ::ng-deep input{
+                    min-height: unset;
+                }
+            }
+
+        }
+        .main{
+            display: flex;
+            margin-bottom: 15px;
+            .descr{
+                display: flex;
+                flex-direction: column;
+                min-width: 20%;
+                border-left: 1px solid lightgray;
+                padding-left: 15px;
+                item{
+                    margin-bottom: 10px;
+                }
+                label{
+                    font-weight: 400;
+                    min-width: 90px;
+                    font-size: 12px;
+                    opacity: .9;
+                }
+                .price{
+                    span{
+                        color: green;
+                    }
+                }
+            }
+        }
+        .photo-list-details{
+            width: 100%;
+            .item-detail{
+                min-height: 100px;
+                width: 100%;
+                border: 1px solid lightgrey;
+                display: flex;
+                align-items: center;
+                padding: 10px 15px;
+                margin-bottom: 5px;
+                position: relative;
+                .icon-close{
+                    position: absolute;
+                    right: 10px;
+                    top: 10px;
+                    cursor: pointer;
+                }
+                .descr{
+                    margin-left: 15px;
+                    .size{
+                        label{
+                            margin: 0;
+                        }
+                        span{
+                            font-size: 12px;
+                            opacity: .5;
+                        }
+                    }
+                }
+                img{
+                    max-height: 90%;
+                    max-width: 100px;
+                }
+            }
+        }
+    }
+
+    .title{
+        font-weight: 600;
+        /* opacity: 0.6; */
+        padding: 13px 0;
+        border-radius: 3px;
+        font-size: 16px;
+        background: #ebebeb;
+        color: black;
+        text-align: center;
+        margin-bottom: 15px;
+    }
+    .first-column{
+        width: unset;
+    }
+    .separator{
+        width: 1px;
+        border-left: 1px solid lightgray;
+        margin-left: 5%;
+        margin-right: 5%;
+    }
+    .second-column{
+        width: unset;
+        ::ng-deep .photo{
+            width: 100%;
+            height: 80px;
+            margin-bottom: min(35px, 8vh);
+            //background: lightgray;
+            background: url("~src/assets/images/grid.png");
+            background-repeat: repeat;
+            ::ng-deep img{
+                max-width: 100%;
+                max-height: 100%;
+            }
+        }
+        ::ng-deep .loader{
+            width: 40px;
+        }
+        ::ng-deep .item{
+            //height: 45px;
+            display: flex;
+            min-height: 45px;
+            font-size: min(4vw, 15px);
+            width: 100%;
+            align-items: baseline;
+            ::ng-deep .showButton{
+                font-size: min(3vw, 12px);
+                display: flex;
+                align-items: center;
+                background: $secondary-color;
+                border-radius: 8px;
+                color: white;
+                padding: min(1.5vw, 10px);
+                border: 0;
+            }
+            .icon-item{
+                margin-right: 5px;
+                span:before{
+                    font-size: 20px;
+                }
+            }
+            ::ng-deep .hidden-blure{
+                filter: blur(2.2px);
+            }
+            label{
+                font-weight: 500;
+                text-align: left;
+                white-space: nowrap;
+                min-width: min(33vw, 140px);
+            }
+            span{
+                color: $font-color;
+                text-align: left;
+            }
+            .link-style{
+                color: blue;
+                text-decoration: underline;
+                cursor: pointer;
+            }
+            button{
+                width: fit-content;
+                background: lightgray;
+                padding: 10px;
+                font-size: 12px;
+                border-radius: 10px;
+                color: white;
+                margin: 5px;
+                span{
+                    color: white !important;
+                }
+                .icon-whatsapp span, .icon-facebook-1{
+                    &:before{
+                        font-size: 18px;
+                    }
+                }
+                .icon-facebook-1:before{
+                    color: white;
+                }
+            }
+            .whatsapp-button{
+                background-color: #4baf4f;
+                &:focus, &:hover{
+                    .path2:before{
+                        color: #47984b;
+                    }
+                    background-color: #47984b;
+                }
+            }
+            .gmail-button{
+                background: #eceff1;
+                &:focus, &:hover{
+                    background-color: #cfd8db;
+                }
+            }
+            .facebook-button{
+                background: #4e5a8f;
+                &:focus, &:hover{
+                    background-color: #364270;
+                }
+            }
+            .messenger-button{
+                background: #2196f3;
+                &:focus, &:hover{
+                    background-color: #364270;
+                }
+                .icon-messenger .path1:before {
+                    content: "\e975";
+                    color: #2196f3;
+                    font-size: 24px;
+                    border-radius: 50%;
+                    box-shadow: 0px 0px 1px 0px white;
+                }
+                .icon-messenger .path2:before {
+                    content: "\e976";
+                    color: #fafafa;
+                    //margin-left: -1em;
+                    font-size: 24px;
+                    border-radius: 50%;
+                    box-shadow: 0px 0px 1px 0px white;
+                }
+            }
+        }
+    }
+    .modal-footer{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-left: 0;
+        .btns{
+            width: 100%;
+            display: flex;
+            justify-content: flex-end;
+        }
+    }
+    @media screen and (max-width: $MEDIUM_SCREEN) {
+
+    }
+
+    @media screen and (max-width: $LAPTOP_SCREEN) {
+
+    }
+    //$SMALL_SCREEN: 320px;
+    //$MEDIUM_SCREEN: 375px;
+    //$LARGE_SCREEN: 425px;
+    //$TABLET_SCREEN: 768px;
+    //$LAPTOP_SCREEN: 1024px;
+}
+
+.first-column{
+    border: 0;
+}
+
+
+::ng-deep .myModal .modal-dialog .top-container {
+    .modal-body{
+        padding-bottom: 0;
+        display: flex;
+    }
+    .header{
+        color: black;
+        background: unset;
+        font-size: 15px;
+        font-weight: 600;
+    }
+    .message{
+        font-size: 12px;
+    }
+}
+.tag{
+    display: inline-flex;
+    border-radius: 5px;
+    margin-right: 5px;
+    margin-bottom: 3px;
+    color: white;
+    padding: 4px 5px 1px 5px;
+    box-shadow: 1px 0 0 0 #00000063;
+    cursor: pointer;
+    background-color: $secondary-color;
+}
+
+.total_price{
+    color: #4baf4f;
+    font-weight: 500;
+    font-size: 15px;
+}

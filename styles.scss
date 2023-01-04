@@ -1,0 +1,130 @@
+/* You can add global styles to this file, and also import other style files */
+@import "variables.style";
+@import "~@ng-select/ng-select/themes/default.theme.css";
+@import '~@angular/cdk/overlay-prebuilt.css'; /** Add this only for non-material project */
+//@import '~lightgallery/scss/lightgallery';
+
+.invalid-feedback{
+  display: block
+}
+
+.main-header{
+    display: flex;
+    height: $header-height;
+    background-color: $main-color;
+    color: var(--color-header-text);
+    font-size: 16px ;
+    //position: fixed;
+    width: 100%;
+    margin: 0;
+    position: fixed;
+    top: 0;
+}
+.main-footer{
+    display: flex;
+    height: $footer-height;
+    background-color: $main-color;
+    color: var(--color-header-text);
+    font-size: 16px ;
+    padding-bottom: 8px ;
+    padding-top: 8px;
+    bottom: 0;
+    position: fixed;
+    width: 100%;
+    margin: 0;
+    z-index: 2;
+}
+
+.main-body{
+    display: flex;
+    flex: 1;
+    height: 100vh;
+    position: fixed;
+    top: $header-height;
+    right: 0;
+    left: 0;
+}
+
+// SCSS for the welcome message
+
+// Set some base styles for the welcome message
+#welcome-message {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  border: 1px solid black;
+  border-radius: 5px;
+  padding: 20px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+
+  // Make the font sizes responsive
+  h1 {
+    font-size: 32px;
+    margin: 0;
+  }
+  
+  p {
+    font-size: 18px;
+    margin: 10px 0;
+  }
+  
+  // Use media queries to adjust the font sizes on smaller screens
+  @media (max-width: 600px) {
+    h1 {
+      font-size: 28px;
+    }
+    
+    p {
+      font-size: 16px;
+    }
+  }
+  
+  @media (max-width: 400px) {
+    h1 {
+      font-size: 24px;
+    }
+    
+    p {
+      font-size: 14px;
+    }
+  }
+}
+
+// Style the close button
+#close-button {
+  background-color: #e74c3c;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  cursor: pointer;
+  font-size: 16px;
+  padding: 10px 20px;
+  
+  // Add a hover effect
+  &:hover {
+    background-color: #c0392b;
+  }
+}
+
+// Use media queries to adjust the position of the welcome message on smaller screens
+@media (max-width: 600px) {
+  #welcome-message {
+    position: relative;
+    top: 0;
+    left: 0;
+    transform: none;
+  }
+}
+
+
+
+html, body { height: 100%; color: $font-color!important; }
+body { margin: 0; font-family: Ubuntu, "Helvetica Neue", sans-serif}
+
+/* Importing Bootstrap SCSS file. */
+@import '~bootstrap/scss/bootstrap';
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

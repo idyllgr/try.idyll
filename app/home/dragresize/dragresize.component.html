@@ -1,0 +1,46 @@
+<div
+    id='chat'
+    [style.top.px]='y'
+    [style.left.px]='x'
+    [style.width.px]='width'
+    [style.height.px]='height'
+    (mousedown)="!disabled ? onWindowPress($event): null"
+    (touchstart)='!disabled ?onWindowPress($event): null'
+    (mousemove)='!disabled ? onWindowDrag($event): null'
+    (touchmove)='!disabled ? onWindowDrag($event?.touches[0]): null'
+    (touchend)='!disabled ? checkBoundaries($event?.changedTouches[0]): null'
+    (touchcancel)='!disabled ? checkBoundaries($event.changedTouches[0]): null'
+    [ngStyle]="{'background-image': 'url('+(imgSrc) +')',
+      'background-size': 'cover',
+    'background-position': 'center',
+    'background-repeat':' no-repeat',
+    'position': 'absolute',
+        'background-color': 'unset',
+        'box-shadow': mainStore.selectedBusiness?.parameter?.can_update_settings &&
+                                            mainStore.selectedBusiness?.parameter?.show_shadow_in_products ? '0px 0px 3px 2px #636060': 'none'
+    }"
+    *ngIf="!loading; else loadingTemplate"
+    [ngClass]="{'dragging': draggingWindow || draggingCorner}"
+    (mouseover)="!disabled ? (hovered = true): null"
+    (mouseleave)="!disabled ? (hovered = false): null"
+    #MyObject
+>
+<!--    'box-shadow': 'inset 0px 0px 0px 5px #2c2b2b'-->
+    <div *ngIf="isDeleting" class="isDeleting">&nbsp;</div>
+
+    <ng-container *ngIf="(selected || hovered) && !disabled">
+        <div (touchstart)="onCornerClick($event, topLeftResize)" (mousedown)='onCornerClick($event, topLeftResize)' id='chat-top-left-resize' class='chat-corner-resize'></div>
+        <div (touchstart)="onCornerClick($event, topRightResize)" (mousedown)='onCornerClick($event, topRightResize)' id='chat-top-right-resize' class='chat-corner-resize'></div>
+        <div (touchstart)="onCornerClick($event, bottomLeftResize)" (mousedown)='onCornerClick($event, bottomLeftResize)' id='chat-bottom-left-resize' class='chat-corner-resize'></div>
+        <div (touchstart)="onCornerClick($event, bottomRightResize)" (mousedown)="onCornerClick($event, bottomRightResize)" id='chat-bottom-right-resize' class='chat-corner-resize'></div>
+        <div class="trash mat-button"
+             (click)="deleteItem()"
+             (touchend)="deleteItem()"
+             (mouseover)="hovered = true"
+             [matTooltip]="'DELETE' | translate"><i class="icon-trash"></i></div>
+    </ng-container>
+</div>
+
+<ng-template #loadingTemplate>
+    Φορτώνει
+</ng-template>

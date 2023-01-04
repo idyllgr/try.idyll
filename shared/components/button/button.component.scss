@@ -1,0 +1,86 @@
+@import "../../../variables.style";
+
+
+
+.mybutton{
+  //min-height: 36px;
+  //border-radius: 6px;
+  //display: inline-block;
+    font-size: 13px;
+  border: none;
+  transition: all 0.4s ease 0s;
+  background-color: #f3f3f3;
+  i:before{
+    font-size: 17px;
+  }
+
+  &:focus {
+    outline: none;
+    box-shadow: none;
+  }
+
+  &:hover {
+    //background: $textColor;
+    //letter-spacing: .03em;
+    //color: white;
+    background-position: right center;
+    //i:before{
+    //  color: white;
+    //}
+  }
+
+  &:active {
+    transform: translateY(.2em);
+    filter: saturate(150%);
+  }
+}
+
+
+.primary{
+  //background-image: $maingradient;
+  background: $secondary-color;//$secondaryColor;
+  //color: #ffffff;
+  color: white; //$primaryColor;
+  //border: 0.1px solid $primaryColor;
+  //border-radius: 0;
+  i:before{
+    color: white; //$primaryColor;
+    font-size: 14px;
+  }
+}
+
+.secondary{
+  background-color: inherit;
+  color: $secondary-color;
+  i:before{
+    color: $secondary-color;
+    font-size: 14px;
+  }
+}
+
+.danger{
+  //background-color: inherit;
+  color: $danger;
+  i:before{
+    color: $danger;
+    font-size: 14px;
+  }
+}
+
+
+button:disabled,
+button[disabled]{
+  //opacity: .6;
+  color: white;
+  background-color: lightgray;
+  background-image: inherit;
+  cursor: auto;
+  border: 0;
+  i:before{
+    color:rgba(0, 0, 0, 0.26);
+  }
+}
+
+::ng-deep .mat-button .mat-button-wrapper>*{
+  vertical-align: baseline !important;
+}

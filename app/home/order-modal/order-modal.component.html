@@ -1,0 +1,499 @@
+<div class="top-container container-fluid" *ngIf="selected_products?.length>0 && myForm">
+    <div class="header modal-header">
+        <div class="main-title">
+            {{ 'CREATE NEW ORDER' | translate}}
+        </div>
+        <a class="pointer" style="cursor: pointer" (click)="modal.dismiss('Close click')">
+            {{'CLOSE' | translate}}&nbsp;<span class="icon-close"></span>
+        </a>
+    </div>
+    <div class="modal-body row">
+        <form [formGroup]="myForm" class=" first-column col-12 col-md">
+            <div class="title">{{'MAKE A QUICK ORDER' | translate}}</div>
+            <div class="details" >
+                <div class="main row" >
+                    <ng-container *ngIf="selected_products.length === 1; else multipleProductsTemplate">
+                        <div class="photo-details col" >
+                            <img
+                                #imgView
+                                [attr.src]="(selected_products[0]?.photo | getPhotoFromBackend: 'assets/images/business_photos/' | async) "
+                            />
+                            <!--                            [defaultImage]="'assets/images/loading_5.gif'"-->
+                            <!--                            [ngClass]="{'small-size': imgView.src === 'assets/images/img_placeholder.png'}"-->
+                        </div>
+                        <div class="descr col">
+                            <div class="item name" *ngIf="selected_products[0]?.name">
+                                <label>{{'NAME' | translate}}:</label>
+                                <span>{{selected_products[0].name}}</span>
+                            </div>
+                            <div class="item" *ngIf="selected_products[0]?.description">
+                                <label>{{'DESCRIPTION' | translate}}:</label>
+                                <span>{{selected_products[0].description}}</span>
+                            </div>
+                            <div class="item" *ngIf="selected_products[0]?.link">
+                                <label>{{'LINK' | translate}}:</label>
+                                <span>{{selected_products[0].link}}</span>
+                            </div>
+                            <div class="item price" *ngIf="selected_products[0]?.dimensions?.length>0">
+                                <label>{{'AVAILABLE SIZES' | translate}}:</label>
+                                <div *ngFor="let dimension of selected_products[0]?.dimensions" class="tag">
+                                    {{dimension?.label}} ({{ mainStore.selectedBusiness?.parameter?.unit || ' m(SI) '}}) - {{dimension?.price | currency: mainStore.selectedBusiness?.location?.currency_symbol || ' $'}}
+                                </div>
+                            </div>
+                        </div>
+                    </ng-container>
+                    <ng-template #multipleProductsTemplate>
+                        <div class="photo-list-details" formArrayName="products">
+                            <div class="item-detail" *ngFor="let product of getDimensionsControls('products'); let i = index">
+                                <i class="icon-close" (click)="deleteProduct(product)"></i>
+                                <img
+                                    #imgView
+                                    [ngClass]="{'small-size': imgView.src === 'assets/images/img_placeholder.png'}"
+                                    [attr.src]="(product.value?.item?.photo | getPhotoFromBackend: 'assets/images/business_photos/' | async) "
+                                />
+                                <div class="descr" >
+                                    <div class="item name" *ngIf="product?.value?.item?.name">
+                                        <label>{{'NAME' | translate}}:</label>
+                                        <span>{{product.value.item.name}}</span>
+                                    </div>
+                                    <div class="item" *ngIf="product?.value?.item?.description">
+                                        <label>{{'DESCRIPTION' | translate}}:</label>
+                                        <span>{{product.value.item.description}}</span>
+                                    </div>
+                                    <div class="item" *ngIf="product?.value?.item?.link">
+                                        <label>{{'LINK' | translate}}:</label>
+                                        <span>{{product.value.item.link}}</span>
+                                    </div>
+                                    <div class="item-input size item price"
+                                         [formGroupName]="i"
+                                         *ngIf="product.value?.item?.dimensions?.length>0; else noDimensionsTemp">
+                                        <label>{{'AVAILABLE SIZES' | translate}}
+                                            ({{ mainStore.selectedBusiness?.parameter?.unit || ' m(SI) '}}):</label>
+                                        <ng-select
+                                            [items]="product.value.item?.dimensions"
+                                            bindLabel="label"
+                                            bindValue="id"
+                                            [multiple]="false"
+                                            class="form-control select"
+                                            [clearable]="false"
+                                            placeholder="{{ 'CHOOSE A SIZE' | translate }} "
+                                            formControlName="dimension_id"
+                                            [closeOnSelect]="true"
+                                        >
+                                            <ng-template ng-label-tmp let-item="item">
+                                                {{item.width}} x {{item.height}} - ({{'PRICE' | translate}}: {{item.price }} {{ mainStore.selectedBusiness?.location?.currency_symbol || ' $'}})
+                                            </ng-template>
+                                            <ng-template ng-option-tmp let-item="item" let-index="index" >
+                                                {{item.width}} x {{item.height}} - ({{'PRICE' | translate}}: {{item.price }} {{ mainStore.selectedBusiness?.location?.currency_symbol || ' $'}})
+                                            </ng-template>
+                                        </ng-select>&nbsp;&nbsp;
+                                        <input type="hidden"
+                                               [ngModel]="product.value.item?.id"
+                                               formControlName="product_id"/>
+                                    </div>
+                                    <ng-template #noDimensionsTemp>
+                                        <div class="size item">
+                                            <label>{{'AVAILABLE SIZES' | translate}}:</label>
+                                            <span>{{'NO SIZE TO CHOOSE PLEASE CONTACT THE BUYER FOR MORE INFORMATION' | translate }}</span>
+                                        </div>
+                                    </ng-template>
+                                </div>
+                            </div>
+                        </div>
+                    </ng-template>
+                </div>
+                <ng-container *ngIf="selected_products?.length === 1">
+                    <div formArrayName="products" >
+                        <div  class="item-input row" *ngFor="let product of getDimensionsControls('products'); let i = index">
+                            <label class="col-12 col-md-3 col-xl-2">
+                                {{'AVAILABLE SIZES' | translate}} ({{ mainStore.selectedBusiness?.parameter?.unit || ' m(SI) '}})
+                                <span *ngIf="isRequired(product['dimension_id'])">(*)</span>
+                            </label>
+                            <div class=" col-12 col-md-9 col-xl-10" [formGroupName]="i">
+                                <ng-select
+                                    [items]="product.value?.item?.dimensions"
+                                    bindLabel="label"
+                                    bindValue="id"
+                                    [multiple]="false"
+                                    class="form-control select"
+                                    [clearable]="false"
+                                    placeholder="{{ 'CHOOSE A SIZE' | translate }} "
+                                    formControlName="dimension_id"
+                                    [closeOnSelect]="true"
+                                >
+                                    <ng-template ng-label-tmp let-item="item">
+                                        {{item.width}} x {{item.height}} - ({{'PRICE' | translate}}: {{item.price }} {{ mainStore.selectedBusiness?.location?.currency_symbol || ' $'}})
+                                    </ng-template>
+                                    <ng-template ng-option-tmp let-item="item" let-index="index" >
+                                        {{item.width}} x {{item.height}} - ({{'PRICE' | translate}}: {{item.price }} {{ mainStore.selectedBusiness?.location?.currency_symbol || ' $'}})
+                                    </ng-template>
+                                </ng-select>
+                                <input type="hidden"
+                                       [ngModel]="product.value?.item?.id"
+                                       formControlName="product_id" />
+                            </div>
+                        </div>
+                    </div>
+                </ng-container>
+                <div class="item-input row">
+                    <label class="col-12 col-md-3 col-xl-2">
+                        {{'NAME' | translate}}
+                        <span *ngIf="isRequired(myForm.controls['name'])">(*)</span>
+                    </label>
+                    <div class=" col-12 col-md-9 col-xl-10">
+                        <input type="text" class="form-control input"
+                               [placeholder]="'TYPE HERE' | translate"
+                               [formControl]="myForm.controls['name']"
+                               [class.is-invalid] = "myForm.get('name').invalid &&
+                               myForm.get('name').touched"
+                               (click)="show()"
+                        />
+                        <div class="text-danger"
+                             *ngIf="myForm.controls['name'].hasError('required')
+                                   && myForm.controls['name'].touched">
+                            {{'NAME IS REQUIRED' | translate}}
+                        </div>
+                    </div>
+                </div>
+                <div class="item-input row">
+                    <label class="col-12 col-md-3 col-xl-2">
+                        {{'PHONE' | translate}}
+                        <span *ngIf="isRequired(myForm.controls['phone'])">(*)</span>
+                    </label>
+                    <div class=" col-12 col-md-9 col-xl-10">
+                        <input type="text" class="form-control input"
+                               [placeholder]="'TYPE HERE' | translate"
+                               [formControl]="myForm.controls['phone']"
+                               [class.is-invalid] = "myForm.get('phone').invalid &&
+                               myForm.get('phone').touched"
+                        />
+                        <div class="text-danger"
+                             *ngIf="myForm.controls['phone'].hasError('required')
+                                   && myForm.controls['phone'].touched">
+                            {{'THE PHONE NUMBER IS REQUIRED' | translate}}
+                        </div>
+                    </div>
+                </div>
+                <div class="item-input row">
+                    <!--                    fxLayout="column" fxLayoutAlign="center"-->
+
+                    <!--                    <agm-map [latitude]="latitude"-->
+                    <!--                             [longitude]="longitude"-->
+                    <!--                             [scrollwheel]="false"-->
+                    <!--                             [zoom]="zoom">-->
+                    <!--                        <agm-marker [latitude]="latitude" [longitude]="longitude"></agm-marker>-->
+                    <!--                    </agm-map>-->
+
+                    <label class="col-12 col-md-3 col-xl-2">
+                        {{'ADDRESS' | translate}}
+                        <span *ngIf="isRequired(myForm.controls['address'])">(*)</span>
+                    </label>
+
+                    <div class="autocomplete-container align-self-center d-flex col-12 col-md-9 col-xl-10">
+                        <textarea
+                            [formControl]="myForm.controls['address']"
+                            class="form-control input"
+                            [placeholder]="'TYPE HERE' | translate"
+                        ></textarea>
+                    </div>
+                    <!--                    matGoogleMapsAutocomplete-->
+                    <!--                    (onAutocompleteSelected)="onAutocompleteSelected($event)"-->
+                    <!--                    (onLocationSelected)="onLocationSelected($event)"-->
+                </div>
+                <!--                        <div class="second-column col-12 col-md-5 col-lg-4">-->
+                <!--                            <div class="item-input">-->
+                <!--&lt;!&ndash;                              <span class="icon">&ndash;&gt;-->
+                <!--    &lt;!&ndash;                                    <img src="assets/images/anoucement.png" />&ndash;&gt;-->
+                <!--&lt;!&ndash;                              </span>&ndash;&gt;-->
+                <!--                                <label>{{ 'PHONE' | translate }}:</label>-->
+                <!--                                <ng-container *ngIf="!isEditting.customer_phone; else edit_customer_phone">-->
+                <!--                                    <span class="value">{{initialForm?.customer_phone}}</span>-->
+                <!--                                    &lt;!&ndash;                                    <span class="editicon" (click)="openInputForEditting(FormInputs.name)">&ndash;&gt;-->
+                <!--                                    &lt;!&ndash;                                      <i class="icon-edit" data-toggle="tooltip" data-placement="top" title="Modifier"></i>&ndash;&gt;-->
+                <!--                                    &lt;!&ndash;                                    </span>&ndash;&gt;-->
+                <!--                                </ng-container>-->
+                <!--                                <ng-template #edit_customer_phone>-->
+                <!--                                    <span class="value">-->
+                <!--                                      <input type="text"-->
+                <!--                                             class="form-control input"-->
+                <!--                                             placeholder="{{'TYPE HERE' | translate }}" [formControl]="myForm.controls[FormInputs.customer_phone]" />-->
+                <!--                                    </span>-->
+                <!--                                    &lt;!&ndash;                                    <div class="form-control-feedback"&ndash;&gt;-->
+                <!--                                    &lt;!&ndash;                                         *ngIf="myForm.controls[FormInputs.name].hasError('required')&ndash;&gt;-->
+                <!--                                    &lt;!&ndash;                                                && myForm.controls[FormInputs.name].touched">&ndash;&gt;-->
+                <!--                                    &lt;!&ndash;                                        <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>&ndash;&gt;-->
+                <!--                                    &lt;!&ndash;                                        {{ 'THE NAME OF THE COURSE IS REQUIRED' | translate }}&ndash;&gt;-->
+                <!--                                    &lt;!&ndash;                                    </div>&ndash;&gt;-->
+                <!--                                </ng-template>-->
+                <!--                            </div>-->
+                <!--                            <div class="item-input">-->
+                <!--&lt;!&ndash;                              <span class="icon">&ndash;&gt;-->
+                <!--    &lt;!&ndash;                                    <img src="assets/images/anoucement.png" />&ndash;&gt;-->
+                <!--&lt;!&ndash;                              </span>&ndash;&gt;-->
+                <!--                                <label>{{ 'COUNTRY' | translate }}:</label>-->
+                <!--                                <ng-container *ngIf="!isEditting.customer_country; else edit_customer_country">-->
+                <!--                                    <span class="value">{{initialForm?.customer_country}}</span>-->
+                <!--                                    &lt;!&ndash;                                <span class="editicon" (click)="openInputForEditting(FormInputs.description)">&ndash;&gt;-->
+                <!--                                    &lt;!&ndash;                                  <i class="icon-edit" data-toggle="tooltip" data-placement="top" title="Modifier"></i>&ndash;&gt;-->
+                <!--                                    &lt;!&ndash;                                </span>&ndash;&gt;-->
+                <!--                                </ng-container>-->
+                <!--                                <ng-template #edit_customer_country>-->
+                <!--                                <span class="value">-->
+                <!--                                  <input-->
+                <!--                                      class="form-control input text-area"-->
+                <!--                                      type="text"-->
+                <!--                                      placeholder="{{'TYPE HERE' | translate }}" [formControl]="myForm.controls[FormInputs.customer_country]" />-->
+                <!--                                </span>-->
+                <!--                                    &lt;!&ndash;                                </div>&ndash;&gt;-->
+                <!--                                </ng-template>-->
+                <!--                            </div>-->
+                <!--                            <div class="item-input">-->
+                <!--                                &lt;!&ndash;                              <span class="icon">&ndash;&gt;-->
+                <!--                                &lt;!&ndash;                                    <img src="assets/images/anoucement.png" />&ndash;&gt;-->
+                <!--                                &lt;!&ndash;                              </span>&ndash;&gt;-->
+                <!--                                <label>{{ 'CITY' | translate }}:</label>-->
+                <!--                                <ng-container *ngIf="!isEditting.customer_city; else edit_customer_city">-->
+                <!--                                    <span class="value">{{initialForm?.customer_city}}</span>-->
+                <!--                                    &lt;!&ndash;                                <span class="editicon" (click)="openInputForEditting(FormInputs.description)">&ndash;&gt;-->
+                <!--                                    &lt;!&ndash;                                  <i class="icon-edit" data-toggle="tooltip" data-placement="top" title="Modifier"></i>&ndash;&gt;-->
+                <!--                                    &lt;!&ndash;                                </span>&ndash;&gt;-->
+                <!--                                </ng-container>-->
+                <!--                                <ng-template #edit_customer_city>-->
+                <!--                                <span class="value">-->
+                <!--                                  <input-->
+                <!--                                      class="form-control input"-->
+                <!--                                      type="text"-->
+                <!--                                      placeholder="{{'TYPE HERE' | translate }}" [formControl]="myForm.controls[FormInputs.customer_city]" />-->
+                <!--                                </span>-->
+                <!--                                    &lt;!&ndash;                                </div>&ndash;&gt;-->
+                <!--                                </ng-template>-->
+                <!--                            </div>-->
+                <!--                            <div class="item-input">-->
+                <!--&lt;!&ndash;                              <span class="icon">&ndash;&gt;-->
+                <!--    &lt;!&ndash;                         <img src="assets/images/anoucement.png" />&ndash;&gt;-->
+                <!--&lt;!&ndash;                              </span>&ndash;&gt;-->
+                <!--                                <label>{{ 'PRODUCT' | translate }}:</label>-->
+                <!--                                <ng-container *ngIf="!isEditting.product_id; else edit_product">-->
+                <!--                                    <span class="value">{{initialForm?.product?.name}}</span>-->
+                <!--                                </ng-container>-->
+                <!--                                <ng-template #edit_product>-->
+                <!--                                <span class="value">-->
+                <!--                                    <ng-select-->
+                <!--                                        [items]="products"-->
+                <!--                                        bindLabel="name"-->
+                <!--                                        bindValue="id"-->
+                <!--                                        [multiple]="false"-->
+                <!--                                        class="form-control select"-->
+                <!--                                        [clearable]="true"-->
+                <!--                                        placeholder="{{ 'SELECT THE PRODUCT' | translate }} "-->
+                <!--                                        [formControl]="myForm.controls[FormInputs.product_id]"-->
+                <!--                                        [loading]="loadingSelect['products']"-->
+                <!--                                        (open)="selectOpened('products')"-->
+                <!--                                        [closeOnSelect]="true"-->
+                <!--                                    >-->
+                <!--                                    </ng-select>-->
+                <!--                                </span>-->
+                <!--                                </ng-template>-->
+                <!--                            </div>-->
+                <!--                            <div class="item-input">-->
+                <!--                                &lt;!&ndash;                              <span class="icon">&ndash;&gt;-->
+                <!--                                &lt;!&ndash;                         <img src="assets/images/anoucement.png" />&ndash;&gt;-->
+                <!--                                &lt;!&ndash;                              </span>&ndash;&gt;-->
+                <!--                                <label>{{ 'STATUS' | translate }}:</label>-->
+                <!--                                <ng-container *ngIf="!isEditting.status; else edit_category">-->
+                <!--                                    <span class="value cell-dot-text">-->
+                <!--                                            <div class="dot-flag"-->
+                <!--                                                 [ngClass]="{-->
+                <!--                                                    'started': order?.status?.toLowerCase() === 'started',-->
+                <!--                                                    'pending': order?.status?.toLowerCase() === 'pending',-->
+                <!--                                                    'canceled': order?.status?.toLowerCase() === 'canceled',-->
+                <!--                                                    'completed': order?.status?.toLowerCase() === 'completed'-->
+                <!--                                                 }"-->
+                <!--                                            >&nbsp;</div>-->
+                <!--                                            <div>-->
+                <!--                                                {{getStatut(order?.status)}}-->
+                <!--                                            </div>-->
+                <!--                                    </span>-->
+                <!--                                </ng-container>-->
+                <!--                                <ng-template #edit_category>-->
+                <!--                                <span class="value">-->
+                <!--                                    <ng-select-->
+                <!--                                        [items]="statusItems"-->
+                <!--                                        bindLabel="name"-->
+                <!--                                        bindValue="value"-->
+                <!--                                        [multiple]="false"-->
+                <!--                                        class="form-control select"-->
+                <!--                                        [clearable]="false"-->
+                <!--                                        placeholder="{{ 'SELECT THE STATUS' | translate }} "-->
+                <!--                                        [formControl]="myForm.controls[FormInputs.status]"-->
+                <!--                                        [loading]="loadingSelect['status']"-->
+                <!--                                        (open)="selectOpened('status')"-->
+                <!--                                        [closeOnSelect]="true"-->
+                <!--                                    >-->
+                <!--                                        <ng-template ng-label-tmp let-item="item">-->
+                <!--                                            <div class="cell-dot-text">-->
+                <!--                                                 <div class="dot-flag"-->
+                <!--                                                      [ngClass]="{-->
+                <!--                                                    'started': item.value?.toLowerCase() === 'started',-->
+                <!--                                                    'pending': item.value?.toLowerCase() === 'pending',-->
+                <!--                                                    'canceled': item.value?.toLowerCase() === 'canceled',-->
+                <!--                                                    'completed': item.value?.toLowerCase() === 'completed'-->
+                <!--                                                 }"-->
+                <!--                                                 >&nbsp;</div>&nbsp;<span>{{item.name}}</span>-->
+                <!--                                            </div>-->
+                <!--                                        </ng-template>-->
+                <!--                                        <ng-template ng-option-tmp let-item="item" let-index="index" let-search="searchTerm">-->
+                <!--                                            <div class="cell-dot-text">-->
+                <!--                                                <div class="dot-flag"-->
+                <!--                                                     [ngClass]="{-->
+                <!--                                                    'started': item.value?.toLowerCase() === 'started',-->
+                <!--                                                    'pending': item.value?.toLowerCase() === 'pending',-->
+                <!--                                                    'canceled': item.value?.toLowerCase() === 'canceled',-->
+                <!--                                                    'completed': item.value?.toLowerCase() === 'completed'-->
+                <!--                                                 }"-->
+                <!--                                                >&nbsp;</div>&nbsp;<span>{{item.name}}</span>-->
+                <!--                                            </div>-->
+                <!--                                        </ng-template>-->
+
+                <!--                                    </ng-select>-->
+                <!--                                </span>-->
+                <!--                                </ng-template>-->
+                <!--                            </div>-->
+                <!--                        </div>-->
+            </div>
+            <div class="modal-footer">
+                <div>{{'TOTAL PRICE' | translate}}: <span class="total_price">{{getTotalPrice()}} {{mainStore.selectedBusiness?.parameter?.currency_symbol || ' $'}}</span></div>
+                <div class="message">
+                    {{'CREATE ORDER MESSAGE' | translate}}
+                </div>
+                <div class="btns">
+                    <app-button [text]="'CANCEL' | translate"
+                                [type]="'secondary'"
+                                (onClick)="checkForm()"
+                                [customStyle]="{'min-height': '30px', 'margin-right': '15px'}">
+                    </app-button>
+                    <app-button [text]="'CREATE ORDER' | translate"
+                                [type]="'primary'"
+                                [isDisabled]="isDisabled()"
+                                (click)="onSubmitAddOrder()"
+                                [customStyle]="{'min-height': '30px'}">
+                    </app-button>
+                </div>
+                <div class="text-danger" style="font-size: 12px">
+                    This project version is not available for creating orders, there is no backend,
+                    <span style="text-decoration: underline; cursor: pointer" (click)="showInformation()"> click here for more information</span>
+                </div>
+            </div>
+        </form>
+        <span class="separator d-none d-lg-flex col-md-1"></span>
+        <div class=" second-column col-12 col-md">
+            <div class="title">{{'ABOUT THE BUYER' | translate}}</div>
+            <div class="photo"
+                 [ngStyle]="{'background-color':
+                        mainStore.selectedBusiness?.parameter?.can_update_settings ?
+                        mainStore.selectedBusiness?.parameter?.primary_color: null,
+                         'color':  mainStore.selectedBusiness?.parameter?.can_update_settings ?
+                         mainStore.getFontColor(mainStore.selectedBusiness?.parameter?.primary_color): null
+                        }"
+                 *ngIf="(mainStore.selectedBusiness?.logo | getPhotoFromBackend: 'assets/images/business_photos/' | async) as myimage; else loadingImg">
+                <img *ngIf="myimage"
+                     [attr.src]="myimage" />
+                <!--                 *ngIf="(mainStore.selectedBusiness?.logo | getPhotoFromBackend: mainStore.selectedBusiness?.name | async) as myimage; else loadingImg">-->
+            </div>
+            <ng-template #loadingImg>
+                <!--                                            <img src="'https://www.placecage.com/1000/1000'">-->
+                <div class="photo">
+                    <img class="loader" src="../../../assets/images/loader.gif" />
+                </div>
+            </ng-template>
+            <div class="item">
+                <label class="">
+                    <span class="icon-phone1 icon-item"><span class="path1"></span><span class="path2"></span><span class="path3"></span></span>  &nbsp;
+                    <span>{{'PHONE' | translate}}</span>
+                </label>
+                <span class=" d-flex align-items-center">
+                    <span [ngClass]="{'hidden-blure': hiddenPhoneNumber}">
+                        {{mainStore.selectedBusiness?.phone}}
+                    </span> &nbsp;&nbsp;
+                    <button
+                        class="showButton"
+                        *ngIf="hiddenPhoneNumber"
+                        (click)="showPhone()"
+                    >
+                        <span class="icon-eye"></span>&nbsp;
+                        {{'Show Phone' | translate}}
+                    </button>
+                </span>
+            </div>
+            <div class="item">
+                <label class="">
+                    <span class="icon-internet icon-item"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span><span class="path5"></span><span class="path6"></span><span class="path7"></span><span class="path8"></span></span>  &nbsp;
+                    {{'WEBSITE' | translate}}
+                </label>
+                <span class="link-style">
+                    {{mainStore.selectedBusiness?.website}}
+                </span>
+            </div>
+            <div class="item">
+                <label class="">
+                    <span class="icon-loudspeaker icon-item"><span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span><span class="path5"></span><span class="path6"></span><span class="path7"></span><span class="path8"></span><span class="path9"></span><span class="path10"></span><span class="path11"></span><span class="path12"></span><span class="path13"></span><span class="path14"></span><span class="path15"></span><span class="path16"></span><span class="path17"></span><span class="path18"></span><span class="path19"></span><span class="path20"></span><span class="path21"></span><span class="path22"></span><span class="path23"></span><span class="path24"></span><span class="path25"></span><span class="path26"></span><span class="path27"></span><span class="path28"></span></span>  &nbsp;
+                    {{'DESCRIPTION' | translate}}
+                </label>
+                <span class="">
+                    {{mainStore.selectedBusiness?.description}}
+                </span>
+            </div>
+            <div class="item row justify-content-center">
+                <div class="col">
+                    <button
+                        *ngIf="mainStore.selectedBusiness?.parameter?.can_update_settings &&
+                                            mainStore.selectedBusiness?.parameter?.show_whatsapp"
+                        mat-icon-button class="whatsapp-button" (click)="onSubmitAddOrder('whatsapp')">
+                        <span class="icon-whatsapp"><span class="path1"></span><span class="path2"></span><span class="path3"></span></span>
+                        {{'CONTACT VIA WHATSAPP' | translate}}
+                    </button>
+                </div>
+                <div class="col">
+                    <button  mat-icon-button
+                             [disabled]="!selected_products || selected_products?.length===0"
+                             (click)="onSubmitAddOrder('facebook')"
+                             *ngIf="mobileDevice && mainStore.selectedBusiness?.parameter?.can_update_settings &&
+                                             mainStore.selectedBusiness?.parameter?.show_facebook; else facebook_button"
+                             class="messenger-button social-button">
+                        <span class="icon-messenger"><span class="path1"></span><span class="path2"></span></span>
+                        {{'CONTACT VIA MESSENGER' | translate}}
+                    </button>
+                    <ng-template #facebook_button>
+                        <button  mat-icon-button
+                                 *ngIf="mainStore.selectedBusiness?.parameter?.can_update_settings &&
+                                            mainStore.selectedBusiness?.parameter?.show_facebook"
+                                 (click)="onSubmitAddOrder('facebook')"
+                                 [disabled]=" !selected_products || selected_products?.length===0"
+                                 class="facebook-button social-button">
+                            <span class="icon-facebook-1"></span>
+                            {{'CONTACT VIA FACEBOOK' | translate}}
+                        </button>
+                    </ng-template>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--            <div class="modal-footer" *ngIf="edditingState || addState">-->
+    <!--                <app-button [text]="'CANCEL' | translate"-->
+    <!--                            [type]="'secondary'"-->
+    <!--                            (click)="cancelEditting()"-->
+    <!--                            [customStyle]="{'min-height': '30px', 'margin-right': '15px'}">-->
+    <!--                </app-button>-->
+    <!--                <app-button [text]="addState ? ('SAVE' | translate) : ( 'SAVE CHANGE' | translate )"-->
+    <!--                            [isDisabled]="isDisabled()"-->
+    <!--                            (click)="onSubmitAddOrder()"-->
+    <!--                            [customStyle]="{'min-height': '30px'}">-->
+    <!--                </app-button>-->
+    <!--&lt;!&ndash;                <div class="form-control-feedback"&ndash;&gt;-->
+    <!--&lt;!&ndash;                     *ngIf="myForm.controls[FormInputs.name].hasError('required')&ndash;&gt;-->
+    <!--&lt;!&ndash;                            && myForm.controls[FormInputs.name].touched">&ndash;&gt;-->
+    <!--&lt;!&ndash;                    <i class="fa fa-exclamation-triangle" aria-hidden="true"></i>&ndash;&gt;-->
+    <!--&lt;!&ndash;                    {{ 'THE NAME OF THE COURSE IS REQUIRED' | translate }}&ndash;&gt;-->
+    <!--            </div>-->
+</div>

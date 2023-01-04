@@ -1,0 +1,92 @@
+<!--<button class="btn mybutton"-->
+<!--        type="button"-->
+<!--        [ngClass]="{'primary': type === myButtonTypes.primary,-->
+<!--        'secondary': type === myButtonTypes.secondary,-->
+<!--        'tertiary': type === myButtonTypes.tertiary}"-->
+<!--        [ngStyle]="customStyle"-->
+<!--        [disabled]="isDisabled"-->
+<!--        (click)="onbtnclick()"-->
+<!--        mat-raised-button-->
+<!--        color="{{type === myButtonTypes.primary ? 'primary': null}}"-->
+<!--&gt;-->
+<!--  <ng-container *ngIf="!isLoading; else loading">-->
+<!--    <i class="{{iconLeft}}"></i>-->
+<!--    {{text}}-->
+<!--    <i class="{{iconRight}}"></i>-->
+<!--  </ng-container>-->
+<!--  <ng-template #loading>-->
+<!--    <i class="fa fa-spinner fa-spin" style="font-size:14px"></i>&nbsp;-->
+<!--    {{textLoading}}-->
+<!--  </ng-template>-->
+<!--</button>-->
+
+<ng-container [ngSwitch]="type">
+  <button class="btn mybutton primary"
+          type="button"
+          [disabled]="isDisabled"
+          [ngStyle]="customStyle"
+          (click)="onbtnclick()"
+          *ngSwitchCase="myButtonTypes.primary"
+
+  >
+<!--      color="primary"-->
+<!--      mat-flat-button-->
+    <ng-container *ngIf="!isLoading; else loading">
+      <i class="{{iconLeft}}"></i>
+      {{text}}
+      <i class="{{iconRight}}"></i>
+    </ng-container>
+    <ng-template #loading>
+      <i class="fa fa-spinner fa-spin" style="font-size:14px"></i>&nbsp;
+      {{textLoading}}
+    </ng-template>
+  </button>
+
+
+  <button class="btn mybutton secondary"
+          type="button"
+          [disabled]="isDisabled"
+          (click)="onbtnclick()"
+          *ngSwitchCase="myButtonTypes.secondary"
+  >
+<!--      mat-button-->
+    <ng-container *ngIf="!isLoading; else loading">
+      <i class="{{iconLeft}}"></i>
+      {{text}}
+      <i class="{{iconRight}}"></i>
+    </ng-container>
+    <ng-template #loading>
+      <i class="fa fa-spinner fa-spin" style="font-size:14px"></i>&nbsp;
+      {{textLoading}}
+    </ng-template>
+  </button>
+
+  <button class="btn mybutton danger"
+          type="button"
+          [disabled]="isDisabled"
+          (click)="onbtnclick()"
+          *ngSwitchCase="myButtonTypes.danger"
+  >
+<!--      mat-button-->
+    <ng-container *ngIf="!isLoading; else loading">
+      <i class="{{iconLeft}}"></i>
+      {{text}}
+      <i class="{{iconRight}}"></i>
+    </ng-container>
+    <ng-template #loading>
+      <i class="fa fa-spinner fa-spin" style="font-size:14px"></i>&nbsp;
+      {{textLoading}}
+    </ng-template>
+  </button>
+
+  <button class="btn mybutton"
+          type="button"
+          [disabled]="isDisabled"
+          (click)="onbtnclick()"
+          *ngSwitchCase="myButtonTypes.icon"
+  >
+<!--      mat-icon-button-->
+<!--      color="primary"-->
+      <i class="{{iconLeft}}"></i>
+  </button>
+</ng-container>

@@ -1,0 +1,27 @@
+@import "../../../variables.style";
+
+.main-header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 100;
+    .logo-container{
+        height: $header-height;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-left: 2%;
+        //background: wheat;
+        //width: $sidebar-width;
+        max-width: 30%;
+        img{
+            max-height: 55%;
+        }
+    }
+    .right-options{
+        display: flex;
+        align-items: center;
+        max-width: 40%;
+        font-size: min(3vw, 12px);
+    }
+}

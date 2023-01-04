@@ -1,0 +1,35 @@
+.language-select{
+    margin-right: 10px;
+    .dropdown-item{
+        cursor: pointer;
+        font-size: 12px;
+    }
+    ::ng-deep .dropdown-toggle::after{
+        margin: 0 5px;
+        color: inherit;//#ccccd3;
+        top: 10px;
+        position: absolute;
+    }
+    .actions_dots{
+        display: flex;
+        align-items: center;
+        color: inherit;//#ccccd3;
+        position: relative;
+        margin: 0 20px;
+        cursor: pointer;
+    }
+    .icon-global{
+        cursor: pointer;
+        &:before{
+            font-size: 20px;
+            font-weight: bold;
+            color: white;
+            opacity: .8;
+        }
+        &:hover{
+            color: inherit;//white;
+            opacity: 1;
+        }
+    }
+
+}

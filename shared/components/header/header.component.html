@@ -1,0 +1,38 @@
+<ul class="nav main-header"
+    [ngStyle]="{'background-color':
+    mainStore.selectedBusiness?.parameter?.can_update_settings ?
+    mainStore.selectedBusiness?.parameter?.primary_color: null,
+     'color':  mainStore.selectedBusiness?.parameter?.can_update_settings ?
+     mainStore.getFontColor(mainStore.selectedBusiness?.parameter?.primary_color): null
+    }"
+>
+    <a href="https://try.idyll.gr" class="logo-container">
+	<div class="logo-container" >
+        <img *ngIf="mainStore?.selectedBusiness"
+        [attr.src]="mainStore.selectedBusiness?.parameter?.can_update_settings && mainStore.selectedBusiness.parameter?.customizable_logo ?
+                   (mainStore.selectedBusiness.logo | getPhotoFromBackend: 'assets/images/business_photos/' | async):
+                   '../../../assets/images/logo.png'"/>
+<!--        mainStore.selectedBusiness.name-->
+<!--        [attr.src]=""mainStore?.selectedBusiness && mainStore.selectedBusiness.parameter?.customizable_logo ?-->
+<!--        (mainStore.selectedBusiness?.logo | getPhotoFromBackend: mainStore.selectedBusiness?.name | async):-->
+<!--        '../../../assets/images/logo.png'-->
+    </div>
+	</a>
+    <div class="right-options">
+<!--        <div class="test" *ngxPermissionsOnly="['admin', 'super']">Hello</div>-->
+        <app-language></app-language>
+<!--        <li class="nav-item" *ngIf="loggedIn">-->
+<!--            <a class="nav-link" routerLinkActive="active" routerLink="/">Home-->
+<!--            </a>-->
+<!--        </li>-->
+<!--        <li class="nav-item" *ngIf="!loggedIn">-->
+<!--            <a class="nav-link" routerLinkActive="active" routerLink="signup">Singup</a>-->
+<!--        </li>-->
+<!--        <li class="nav-item" *ngIf="!loggedIn">-->
+<!--            <a class="nav-link" routerLinkActive="active" routerLink="login">Login</a>-->
+<!--        </li>-->
+<!--        <li class="nav-item" *ngIf="loggedIn">-->
+<!--            <a class="nav-link" (click)="logout()">Logout</a>-->
+<!--        </li>-->
+    </div>
+</ul>

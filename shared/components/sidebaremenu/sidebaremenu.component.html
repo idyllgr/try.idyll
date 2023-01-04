@@ -1,0 +1,94 @@
+<div class="nav-content">
+  <ng-container *ngFor="let item of items">
+    <ng-container *ngIf="item.type === 'link'">
+
+        <a
+            *ngxPermissionsOnly="item.onlyFor"
+         [@slideInOut]
+         [routerLink]="item.link"
+         [routerLinkActive]="'activeTopMenu'"
+         class="top-item list-group-item align-items-center">
+        <div class="label">
+          <i [class]="item.icon"></i>&nbsp;
+          <span>{{ item.name | translate}}</span>&nbsp;
+            <span class="notif" *ngIf="item.notification">{{item.notification}}</span>
+        </div>
+      </a>
+    </ng-container>
+
+    <ng-container *ngIf="item.type === 'sub'">
+<!--        *ngxPermissionsOnly="item.onlyFor"-->
+      <a
+          *ngxPermissionsOnly="item.onlyFor"
+        [routerLinkActive]="'activeTopMenu'"
+        (click)="toggleExpand(item)"
+        [routerLink]="item.link"
+        class="top-item list-group-item align-items-center">
+        <div class="label">
+          <i [class]="item.icon"></i>&nbsp;
+          <span>{{ item.name | translate}}</span>
+        </div>
+        <i [ngClass]="{'icon-bottom-arrow': !hideSubMenuCondition(item), 'icon-right-arrow': hideSubMenuCondition(item)}"></i>
+      </a>
+      <div class="submenu"
+           [ngClass]="{'hide_sub_menu': hideSubMenuCondition(item)}"
+           [@slideInOut]
+      >
+        <div *ngFor="let subItem_1 of item.subMenu" >
+          <ng-container *ngIf="subItem_1.type === 'link'">
+<!--              *ngxPermissionsOnly="subItem_1.onlyFor"-->
+            <a
+                *ngxPermissionsOnly="item.onlyFor"
+              [routerLinkActive]="'activeMenu'"
+              [routerLink]="[goToSubMenu1(item, subItem_1)]"
+              class="submenu-item-1 list-group-item align-items-center">
+              <div class="label">
+                <i [class]="subItem_1.icon"></i>&nbsp;
+                <span>{{ subItem_1.name | translate}}</span>
+              </div>
+<!--              <i [ngClass]="{'icon-bottom-arrow': subItem_1.opened, 'icon-right-arrow': !subItem_1.opened}"></i>-->
+            </a>
+          </ng-container>
+
+
+          <ng-container *ngIf="subItem_1.type === 'sub'">
+<!--              *ngxPermissionsOnly="subItem_1.onlyFor"-->
+            <a
+                *ngxPermissionsOnly="item.onlyFor"
+              [routerLinkActive]="'activeMenu'"
+              [routerLink]="[goToSubMenu1(item, subItem_1)]"
+              class="submenu-item-1 list-group-item align-items-center">
+              <div class="label">
+                <i [class]="subItem_1.icon"></i>&nbsp;
+                <span>{{ subItem_1.name | translate}}</span>
+              </div>
+<!--              <i [ngClass]="{'icon-bottom-arrow': subItem_1.opened, 'icon-right-arrow': !subItem_1.opened}"></i>-->
+            </a>
+            <div class="submenu2"
+                 [ngClass]="{'hide_sub_menu': !showSubMenu2Condition(subItem_1)}"
+                 [@slideInOut]
+            >
+
+              <div *ngFor="let subItem_2 of subItem_1.subMenu" >
+<!--                  *ngxPermissionsOnly="subItem_2.onlyFor"-->
+                <a
+                  [routerLinkActive]="'activeMenu'"
+                  [routerLink]="[goToSubMenu2(item, subItem_1, subItem_2)]"
+                  class="submenu-item-2 list-group-item align-items-center">
+                  <div class="label">
+                    <i [class]="subItem_2.icon"></i>&nbsp;
+                    <span>{{ subItem_2.name | translate}}</span>
+                  </div>
+<!--                  <i [ngClass]="{'icon-bottom-arrow': subItem_2.opened, 'icon-right-arrow': !subItem_2.opened}"></i>-->
+                </a>
+              </div>
+            </div>
+          </ng-container>
+
+
+        </div>
+      </div>
+    </ng-container>
+  </ng-container>
+</div>
+
