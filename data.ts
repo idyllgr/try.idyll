@@ -1,11 +1,4 @@
-// Configuration file
-// We find here all configurations needed to customize the project details like
-// Business name, contact, logo, etc..
-// Backgrounds
-// Products
-// A full backend is done using laravel and mysql, contact me to get it.
-// The backend contains orders management, customizations, stats, products, etc..
-// chbanianass20@gmail.com or m.me/104638675266559 (+212 630931997)
+
 export const data = {
     name: "IDYLL.GR | Δοκιμή Πινάκων",
     logo: "logo.png",
